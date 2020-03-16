@@ -11,7 +11,8 @@ class IAccessDDLCompiler(compiler.DDLCompiler):
 
 
 class IAccessTypeCompiler(compiler.GenericTypeCompiler):
-    pass
+    def visit_boolean(self, type_, **kw):
+        return self.visit_SMALLINT(type_, **kw)
 
 
 class IAccessIdentifierPreparer(compiler.IdentifierPreparer):
