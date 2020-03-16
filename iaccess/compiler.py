@@ -1,3 +1,4 @@
+from sqlalchemy import exc
 from sqlalchemy.sql import compiler
 
 
@@ -9,7 +10,7 @@ class IAccessDDLCompiler(compiler.DDLCompiler):
     pass
 
 
-class IAccessTypeCompiler(compiler.TypeCompiler):
+class IAccessTypeCompiler(compiler.GenericTypeCompiler):
     pass
 
 
