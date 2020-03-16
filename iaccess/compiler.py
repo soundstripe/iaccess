@@ -1,9 +1,9 @@
-from sqlalchemy import exc
 from sqlalchemy.sql import compiler
 
 
 class IAccessCompiler(compiler.SQLCompiler):
-    pass
+    def default_from(self):
+        return " from sysibm.sysdummy1"
 
 
 class IAccessDDLCompiler(compiler.DDLCompiler):
