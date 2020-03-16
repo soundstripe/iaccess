@@ -10,7 +10,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['pyodbc', 'sqlalchemy']
+requirements = ['sqlalchemy', 'pyodbc<4.0.30']
 
 setup_requirements = ['pytest-runner', ]
 
@@ -45,4 +45,9 @@ setup(
     url='https://github.com/soundstripe/iaccess',
     version='0.1.0',
     zip_safe=False,
+    entry_points={
+     'sqlalchemy.dialects': [
+          'iaccess.pyodbc = iaccess.pyodbc:IAccessDialect',
+          ]
+    }
 )
