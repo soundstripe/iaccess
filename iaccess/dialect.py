@@ -1,4 +1,6 @@
-from sqlalchemy import sql, util
+from itertools import groupby
+
+from sqlalchemy import sql, util, and_
 from sqlalchemy.connectors.pyodbc import PyODBCConnector
 from sqlalchemy.engine import default, reflection
 from sqlalchemy.sql import sqltypes
@@ -249,4 +251,27 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
             }
             col_dict.update(additional)
             results.append(col_dict)
+        return results
+
+    @reflection.cache
+    def get_indexes(self, connection, table_name, schema=None, **kw):
+        table_name = self.denormalize_name(table_name)
+        schema = self.denormalize_name(schema or self.default_schema_name)
+        indexes = ischema.indexes
+        keys = ischema.keys
+        j = indexes.join(keys, indexes.c.index_name == keys.c.index_name)
+        s = sql.select([
+            indexes.c.index_name,
+            indexes.c.is_unique,
+            keys.c.column_name,
+        ], and_(
+            indexes.c.table_schema == schema,
+            indexes.c.table_name == table_name,
+        )).select_from(j).order_by(indexes.c.index_name, keys.c.ordinal_position)
+        r = connection.execute(s)
+        grouped = groupby(r, lambda x: (x.index_name, x.is_unique in 'VU'))
+        results = [dict(name=self.normalize_name(index_name),
+                        column_names=[self.normalize_name(c.column_name) for c in columns],
+                        unique=is_unique,
+                        ) for (index_name, is_unique), columns in grouped]
         return results

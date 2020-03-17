@@ -1,4 +1,4 @@
-from sqlalchemy import MetaData, Table, Column, String
+from sqlalchemy import MetaData, Table, Column, String, Integer
 
 ischema = MetaData()
 
@@ -9,7 +9,6 @@ schema = Table(
     schema='QSYS2',
 )
 
-
 tables = Table(
     'SYSTABLES',
     ischema,
@@ -18,7 +17,6 @@ tables = Table(
     Column('TABLE_TYPE', String, key='table_type'),
     schema='QSYS2',
 )
-
 
 columns = Table(
     'SYSCOLUMNS',
@@ -41,5 +39,28 @@ columns = Table(
     Column('IDENTITY_CYCLE', String, key='identity_cycle'),
     Column('IDENTITY_CACHE', String, key='identity_cache'),
     Column('IDENTITY_ORDER', String, key='identity_order'),
+    schema='QSYS2',
+)
+
+indexes = Table(
+    'SYSINDEXES',
+    ischema,
+    Column('INDEX_NAME', String, key='index_name'),
+    Column('TABLE_NAME', String, key='table_name'),
+    Column('TABLE_SCHEMA', String, key='table_schema'),
+    Column('COLUMN_COUNT', String, key='column_count'),
+    Column('IS_UNIQUE', String, key='is_unique'),
+    Column('INDEX_SCHEMA', String, key='index_schema'),
+    Column('INDEX_SCHEMA', String, key='index_schema'),
+    schema='QSYS2',
+)
+
+keys = Table(
+    'SYSKEYS',
+    ischema,
+    Column('INDEX_NAME', String, key='index_name'),
+    Column('COLUMN_NAME', String, key='column_name'),
+    Column('ORDINAL_POSITION', Integer, key='ordinal_position'),
+    Column('COLUMN_NAME', String, key='column_name'),
     schema='QSYS2',
 )
