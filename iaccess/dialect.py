@@ -3,6 +3,7 @@ from itertools import groupby
 from sqlalchemy import sql, util, and_
 from sqlalchemy.connectors.pyodbc import PyODBCConnector
 from sqlalchemy.engine import default, reflection
+from sqlalchemy.exc import SADeprecationWarning
 from sqlalchemy.sql import sqltypes
 from sqlalchemy.types import BLOB, DATE, DATETIME, SMALLINT, BIGINT, INTEGER, CHAR, VARCHAR, CLOB, DECIMAL, NUMERIC, \
     REAL, FLOAT, TIME, TIMESTAMP
@@ -275,16 +276,6 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
                         unique=is_unique,
                         ) for (index_name, is_unique), columns in grouped]
         return results
-
-    @util.deprecated(
-        "0.8",
-        "The :meth:`.Dialect.get_primary_keys` method is deprecated and "
-        "will be removed in a future release.   Please refer to the "
-        ":meth:`.Dialect.get_pk_constraint` method. ",
-    )
-    def get_primary_keys(self, connection, table_name, schema=None, **kw):
-        pk_constraint = self.get_pk_constraint(connection, table_name, schema=schema, **kw)
-        return pk_constraint['constrained_columns'] if pk_constraint is not None else pk_constraint
 
     @reflection.cache
     def get_pk_constraint(self, connection, table_name, schema=None, **kw):
