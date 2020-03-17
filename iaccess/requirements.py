@@ -10,3 +10,7 @@ class Requirements(SuiteRequirements):
     @property
     def ctes(self):
         return exclusions.open()
+
+    @property
+    def autocommit(self):
+        return exclusions.open()
