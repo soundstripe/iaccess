@@ -14,3 +14,7 @@ class Requirements(SuiteRequirements):
     @property
     def autocommit(self):
         return exclusions.open()
+
+    @property
+    def reflects_pk_names(self):
+        return exclusions.open()

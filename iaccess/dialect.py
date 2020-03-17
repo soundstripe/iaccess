@@ -275,3 +275,31 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
                         unique=is_unique,
                         ) for (index_name, is_unique), columns in grouped]
         return results
+
+    @reflection.cache
+    def get_pk_constraint(self, connection, table_name, schema=None, **kw):
+        table_name = self.denormalize_name(table_name)
+        schema = self.denormalize_name(schema or self.default_schema_name)
+        constraints = ischema.constraints
+        constraint_columns = ischema.constraint_columns
+        j = constraints.join(constraint_columns, and_(
+            constraints.c.table_schema == constraint_columns.c.table_schema,
+            constraints.c.table_name == constraint_columns.c.table_name,
+            constraints.c.constraint_name == constraint_columns.c.constraint_name,
+        ))
+        s = sql.select([
+            constraint_columns.c.constraint_name,
+            constraint_columns.c.column_name,
+        ], and_(
+            constraints.c.constraint_type == 'PRIMARY KEY',
+            constraints.c.table_name == table_name,
+            constraints.c.table_schema == schema,
+        )).select_from(j)
+        r = connection.execute(s)
+        grouped = groupby(r, lambda x: self.normalize_name(x.constraint_name))
+        results = [{
+            'constrained_columns': [self.normalize_name(col.column_name) for col in columns],
+            'name': cst_name,
+        } for (cst_name, columns) in grouped]
+        result = results[0]
+        return result

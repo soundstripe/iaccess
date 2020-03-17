@@ -64,3 +64,22 @@ keys = Table(
     Column('COLUMN_NAME', String, key='column_name'),
     schema='QSYS2',
 )
+
+constraints = Table(
+    'SYSCST',
+    ischema,
+    Column('CONSTRAINT_NAME', String, key='constraint_name'),
+    Column('TABLE_NAME', String, key='table_name'),
+    Column('TABLE_SCHEMA', String, key='table_schema'),
+    Column('CONSTRAINT_TYPE', String, key='constraint_type'),
+)
+
+
+constraint_columns = Table(
+    'SYSCSTCOL',
+    ischema,
+    Column('CONSTRAINT_NAME', String, key='constraint_name'),
+    Column('TABLE_NAME', String, key='table_name'),
+    Column('TABLE_SCHEMA', String, key='table_schema'),
+    Column('COLUMN_NAME', String, key='column_name'),
+)
