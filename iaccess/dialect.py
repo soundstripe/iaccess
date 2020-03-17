@@ -1,10 +1,68 @@
-import pyodbc
-from sqlalchemy import sql
+from sqlalchemy import sql, util
 from sqlalchemy.connectors.pyodbc import PyODBCConnector
 from sqlalchemy.engine import default, reflection
+from sqlalchemy.sql import sqltypes
+from sqlalchemy.types import BLOB, DATE, DATETIME, SMALLINT, BIGINT, INTEGER, CHAR, VARCHAR, CLOB, DECIMAL, NUMERIC, \
+    REAL, FLOAT, TIME, TIMESTAMP
 
 from iaccess.compiler import IAccessCompiler, IAccessDDLCompiler, IAccessTypeCompiler, IAccessIdentifierPreparer
 from iaccess.information_schema import iseries as ischema
+
+
+class DOUBLE(sqltypes.Numeric):
+    __visit_name__ = 'DOUBLE'
+
+
+class LONGVARCHAR(sqltypes.VARCHAR):
+    __visit_name_ = 'LONGVARCHAR'
+
+
+class DBCLOB(sqltypes.CLOB):
+    __visit_name__ = "DBCLOB"
+
+
+class GRAPHIC(sqltypes.CHAR):
+    __visit_name__ = "GRAPHIC"
+
+
+class VARGRAPHIC(sqltypes.Unicode):
+    __visit_name__ = "VARGRAPHIC"
+
+
+class LONGVARGRAPHIC(sqltypes.UnicodeText):
+    __visit_name__ = "LONGVARGRAPHIC"
+
+
+class XML(sqltypes.Text):
+    __visit_name__ = "XML"
+
+
+ischema_names = {
+    'BLOB': BLOB,
+    'CHAR': CHAR,
+    'CHARACTER': CHAR,
+    'CLOB': CLOB,
+    'DATE': DATE,
+    'DATETIME': DATETIME,
+    'INTEGER': INTEGER,
+    'SMALLINT': SMALLINT,
+    'BIGINT': BIGINT,
+    'DECIMAL': DECIMAL,
+    'NUMERIC': NUMERIC,
+    'REAL': REAL,
+    'DOUBLE': DOUBLE,
+    'FLOAT': FLOAT,
+    'TIME': TIME,
+    'TIMESTAMP': TIMESTAMP,
+    'VARCHAR': VARCHAR,
+    'LONGVARCHAR': LONGVARCHAR,
+    'XML': XML,
+    'GRAPHIC': GRAPHIC,
+    'VARGRAPHIC': VARGRAPHIC,
+    'LONGVARGRAPHIC': LONGVARGRAPHIC,
+    'DBCLOB': DBCLOB,
+    'TIMESTMP': TIMESTAMP,
+}
 
 
 class IAccessExecutionContext(default.DefaultExecutionContext):
@@ -62,7 +120,7 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
         return c.first() is not None
 
     def _get_default_schema_name(self, connection):
-        query = sql.text("SELECT CURRENT_SCHEMA FROM SYSIBM.SYSDUMMY1")
+        query = sql.text("select CURRENT_SCHEMA from sysibm.sysdummy1")
         default_schema_name = connection.scalar(query)
         if default_schema_name is not None:
             # guard against the case where the default_schema_name is being
@@ -90,7 +148,8 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
     def get_foreign_keys(self, connection, table_name, schema=None, **kw):
         s = """
         select fk.table_name, cst.constraint_name, fk.column_name as constrained_column,
-               tgt.column_name as referred_column, tgt.TABLE_NAME as referred_table, tgt.table_schema as referred_schema
+               tgt.column_name as referred_column, tgt.table_name as referred_table,
+               tgt.table_schema as referred_schema
             from qsys2.syscst cst
                      join qsys2.syskeycst fk
                           on cst.constraint_schema = fk.constraint_schema
@@ -120,4 +179,74 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
                 'referred_table': fk.referred_table,
                 'referred_columns': [fk.referred_column],
             })
+        return results
+
+    @reflection.cache
+    def get_columns(self, connection, table_name, schema=None, **kw):
+        current_schema = self.denormalize_name(schema or self.default_schema_name)
+        table_name = self.denormalize_name(table_name)
+        columns = ischema.columns
+        s = sql.select([
+            columns.c.column_name,
+            columns.c.data_type,
+            columns.c.numeric_precision,
+            columns.c.numeric_scale,
+            columns.c.is_nullable,
+            columns.c.column_default,
+            columns.c.is_identity,
+            columns.c.identity_generation,
+            columns.c.identity_start,
+            columns.c.identity_increment,
+            columns.c.identity_minimum,
+            columns.c.identity_maximum,
+            columns.c.identity_cycle,
+            columns.c.identity_cache,
+            columns.c.identity_order,
+        ], sql.and_(
+            columns.c.table_name == table_name,
+            columns.c.table_schema == current_schema,
+        ))
+        r = connection.execute(s)
+
+        results = []
+        for col in r:
+            data_type = ischema_names.get(col.data_type, None)
+            if data_type is None:
+                util.warn(
+                    "Did not recognize type '%s' of column '%s'"
+                    % (col.data_type, col.column_name)
+                )
+                data_type = sqltypes.NULLTYPE
+
+            if issubclass(data_type, sqltypes.Numeric):
+                precision = col.numeric_precision
+                if not issubclass(data_type, sqltypes.Float):
+                    scale = col.numeric_scale
+
+            additional = {}
+
+            auto_increment = col.is_identity and col.identity_generation is not None
+            if auto_increment:
+                additional['sequence'] = {
+                    'name': '',
+                    'start': col.identity_start,
+                    'increment': col.identity_increment,
+                    'minvalue': col.identity_minimum,
+                    'maxvalue': col.identity_maximum,
+                    'nominvalue': False,
+                    'nomaxvalue': False,
+                    'cycle': col.identity_cycle,
+                    'cache': col.identity_cache,
+                    'order': col.identity_order
+                }
+
+            col_dict = {
+                'name': self.normalize_name(col.column_name),
+                'type': data_type,
+                'nullable': col.is_nullable == 'YES',
+                'default': col.column_default,
+                'autoincrement': auto_increment,
+            }
+            col_dict.update(additional)
+            results.append(col_dict)
         return results
