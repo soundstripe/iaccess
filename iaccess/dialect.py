@@ -301,5 +301,5 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
             'constrained_columns': [self.normalize_name(col.column_name) for col in columns],
             'name': cst_name,
         } for (cst_name, columns) in grouped]
-        result = results[0]
+        result = results[0] if results else None
         return result
