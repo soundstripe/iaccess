@@ -276,6 +276,16 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
                         ) for (index_name, is_unique), columns in grouped]
         return results
 
+    @util.deprecated(
+        "0.8",
+        "The :meth:`.Dialect.get_primary_keys` method is deprecated and "
+        "will be removed in a future release.   Please refer to the "
+        ":meth:`.Dialect.get_pk_constraint` method. ",
+    )
+    def get_primary_keys(self, connection, table_name, schema=None, **kw):
+        pk_constraint = self.get_pk_constraint(connection, table_name, schema=schema, **kw)
+        return pk_constraint['constrained_columns'] if pk_constraint is not None else pk_constraint
+
     @reflection.cache
     def get_pk_constraint(self, connection, table_name, schema=None, **kw):
         table_name = self.denormalize_name(table_name)
