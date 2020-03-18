@@ -1,15 +1,13 @@
 from itertools import groupby
 
+from iaccess.compiler import IAccessCompiler, IAccessDDLCompiler, IAccessTypeCompiler, IAccessIdentifierPreparer
+from iaccess.information_schema import iseries as ischema
 from sqlalchemy import sql, util, and_
 from sqlalchemy.connectors.pyodbc import PyODBCConnector
 from sqlalchemy.engine import default, reflection
-from sqlalchemy.exc import SADeprecationWarning
 from sqlalchemy.sql import sqltypes
 from sqlalchemy.types import BLOB, DATE, DATETIME, SMALLINT, BIGINT, INTEGER, CHAR, VARCHAR, CLOB, DECIMAL, NUMERIC, \
     REAL, FLOAT, TIME, TIMESTAMP
-
-from iaccess.compiler import IAccessCompiler, IAccessDDLCompiler, IAccessTypeCompiler, IAccessIdentifierPreparer
-from iaccess.information_schema import iseries as ischema
 
 
 class DOUBLE(sqltypes.Numeric):
@@ -304,3 +302,16 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
         } for (cst_name, columns) in grouped]
         result = results[0] if results else None
         return result
+
+    def has_sequence(self, connection, sequence_name, schema=None):
+        schema = self.denormalize_name(schema or self.default_schema_name)
+        sequence_name = self.denormalize_name(sequence_name)
+        sequences = ischema.sequences
+        s = sql.select(
+            [sequences.c.sequence_name],
+            and_(
+                sequences.c.sequence_name == sequence_name,
+                sequences.c.sequence_schema == schema,
+            ))
+        r = connection.execute(s)
+        return r.first() is not None

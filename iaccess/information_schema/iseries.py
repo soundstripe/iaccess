@@ -83,3 +83,12 @@ constraint_columns = Table(
     Column('TABLE_SCHEMA', String, key='table_schema'),
     Column('COLUMN_NAME', String, key='column_name'),
 )
+
+
+sequences = Table(
+    'SYSSEQUENCES',
+    ischema,
+    Column('SEQUENCE_SCHEMA', String, key='sequence_schema'),
+    Column('SEQUENCE_NAME', String, key='sequence_name'),
+    schema='QSYS2'
+)
