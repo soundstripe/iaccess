@@ -170,8 +170,8 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
                               and pk.column_position = tgt.ordinal_position
             where cst.constraint_type = 'FOREIGN KEY'
               and fk.ordinal_position = pk.ordinal_position
-              and pk.table_schema = COALESCE(?, CURRENT_SCHEMA)
-              and pk.table_name = ?
+              and fk.table_schema = COALESCE(?, CURRENT_SCHEMA)
+              and fk.table_name = ?
               and enabled = 'YES'"""
         r = connection.execute(s, [schema, table_name])
         results = []

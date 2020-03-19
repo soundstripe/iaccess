@@ -4,6 +4,10 @@ from sqlalchemy.testing.requirements import SuiteRequirements
 
 class Requirements(SuiteRequirements):
     @property
+    def implicitly_named_constraints(self):
+        return exclusions.open()
+
+    @property
     def temp_table_reflection(self):
         return exclusions.closed()
 
