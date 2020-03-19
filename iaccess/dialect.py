@@ -147,6 +147,9 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
 
     @reflection.cache
     def get_foreign_keys(self, connection, table_name, schema=None, **kw):
+        requested_schema = schema
+        table_name = self.denormalize_name(table_name)
+        schema = self.denormalize_name(schema or self.default_schema_name)
         s = """
         select fk.table_name, cst.constraint_name, fk.column_name as constrained_column,
                tgt.column_name as referred_column, tgt.table_name as referred_table,
@@ -164,7 +167,7 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
                      join qsys2.syscolumns tgt
                           on pk.table_schema = tgt.table_schema
                               and pk.table_name = tgt.table_name
-                              and tgt.ordinal_position = fk.column_position
+                              and pk.column_position = tgt.ordinal_position
             where cst.constraint_type = 'FOREIGN KEY'
               and fk.ordinal_position = pk.ordinal_position
               and pk.table_schema = COALESCE(?, CURRENT_SCHEMA)
@@ -173,12 +176,15 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
         r = connection.execute(s, [schema, table_name])
         results = []
         for fk in r:
+            referred_schema = requested_schema
+            if requested_schema is not None:
+                referred_schema = self.normalize_name(fk.referred_schema)
             results.append({
-                'name': fk.table_name,
-                'constrained_columns': [fk.constrained_column],
-                'referred_schema': fk.referred_schema,
-                'referred_table': fk.referred_table,
-                'referred_columns': [fk.referred_column],
+                'name': self.normalize_name(fk.constraint_name),
+                'constrained_columns': [self.normalize_name(fk.constrained_column)],
+                'referred_schema': referred_schema,
+                'referred_table': self.normalize_name(fk.referred_table),
+                'referred_columns': [self.normalize_name(fk.referred_column)],
             })
         return results
 
