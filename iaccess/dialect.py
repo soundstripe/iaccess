@@ -133,7 +133,7 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
     @reflection.cache
     def get_table_names(self, connection, schema=None, **kw):
         tables = ischema.tables
-        schema = schema or self.default_schema_name
+        schema = self.denormalize_name(schema or self.default_schema_name)
         s = sql.select(
             [tables.c.table_name],
             sql.and_(
@@ -142,7 +142,7 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
             ),
             order_by=[tables.c.table_name],
         )
-        table_names = [r[0] for r in connection.execute(s)]
+        table_names = [self.normalize_name(r.table_name) for r in connection.execute(s)]
         return table_names
 
     @reflection.cache
@@ -315,3 +315,5 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
             ))
         r = connection.execute(s)
         return r.first() is not None
+
+
