@@ -5,6 +5,12 @@ import pytest
 from sqlalchemy.testing.suite import *
 
 
+class CTETest(CTETest):
+    @pytest.mark.skip(reason="ctes not allowed in insert statements on db2 for iseries")
+    def test_insert_from_select_round_trip(self):
+        super().test_insert_from_select_round_trip()
+
+
 class ComponentReflectionTest(ComponentReflectionTest):
     @pytest.mark.skip(reason="unique constraints with duplicate column sets unsupported on db2 for iseries")
     def test_get_unique_constraints(self):
