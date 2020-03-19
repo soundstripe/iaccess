@@ -196,6 +196,7 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
         s = sql.select([
             columns.c.column_name,
             columns.c.data_type,
+            columns.c.length,
             columns.c.numeric_precision,
             columns.c.numeric_scale,
             columns.c.is_nullable,
@@ -228,6 +229,8 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
             if issubclass(data_type, sqltypes.Numeric) and not issubclass(data_type, sqltypes.Float):
                 data_type = data_type(precision=col.numeric_precision,
                                       scale=col.numeric_scale)
+            if issubclass(data_type, sqltypes.String) and col.length:
+                data_type = data_type(col.length)
 
             additional = {}
 
