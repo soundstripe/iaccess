@@ -250,7 +250,7 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
             col_dict = {
                 'name': self.normalize_name(col.column_name),
                 'type': data_type,
-                'nullable': col.is_nullable == 'YES',
+                'nullable': col.is_nullable == 'Y',
                 'default': col.column_default,
                 'autoincrement': auto_increment,
             }
