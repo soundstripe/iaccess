@@ -16,3 +16,8 @@ class ComponentReflectionTest(ComponentReflectionTest):
     def test_get_unique_constraints(self):
         return super().test_get_unique_constraints()
 
+
+class ExpandingBoundInTest(ExpandingBoundInTest):
+    @pytest.mark.skip(reason="search condition where null in set not unsupported on db2 for iseries")
+    def test_null_in_empty_set_is_false(self):
+        return super().test_null_in_empty_set_is_false()

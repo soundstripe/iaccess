@@ -7,6 +7,10 @@ class IAccessCompiler(compiler.SQLCompiler):
     def default_from(self):
         return " from sysibm.sysdummy1"
 
+    def visit_empty_set_expr(self, element_types):
+        # noinspection SqlConstantCondition
+        return ' '.join(['SELECT 1', self.default_from(), 'WHERE 1!=1'])
+
 
 class IAccessDDLCompiler(compiler.DDLCompiler):
     def visit_create_table(self, create):
