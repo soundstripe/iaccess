@@ -31,3 +31,6 @@ class Requirements(SuiteRequirements):
     def datetime_microseconds(self):
         return exclusions.closed()
 
+    @property
+    def empty_inserts(self):
+        return exclusions.closed()
