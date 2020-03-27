@@ -44,7 +44,7 @@ ischema_names = {
     'CHARACTER': CHAR,
     'CLOB': CLOB,
     'DATE': DATE,
-    'DATETIME': DATETIME,
+    'DATETIME': TIMESTAMP,
     'INTEGER': INTEGER,
     'SMALLINT': SMALLINT,
     'BIGINT': BIGINT,
@@ -229,7 +229,7 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
             if issubclass(data_type, sqltypes.Numeric) and not issubclass(data_type, sqltypes.Float):
                 data_type = data_type(precision=col.numeric_precision,
                                       scale=col.numeric_scale)
-            if issubclass(data_type, sqltypes.String) and col.length:
+            elif issubclass(data_type, sqltypes.String) and col.length:
                 data_type = data_type(col.length)
 
             additional = {}

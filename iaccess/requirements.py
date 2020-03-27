@@ -22,3 +22,12 @@ class Requirements(SuiteRequirements):
     @property
     def reflects_pk_names(self):
         return exclusions.open()
+
+    @property
+    def datetime(self):
+        return exclusions.closed()
+
+    @property
+    def datetime_microseconds(self):
+        return exclusions.closed()
+
