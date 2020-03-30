@@ -42,3 +42,7 @@ class Requirements(SuiteRequirements):
     @property
     def unbounded_varchar(self):
         return exclusions.closed()
+
+    @property
+    def time_microseconds(self):
+        return exclusions.closed()
