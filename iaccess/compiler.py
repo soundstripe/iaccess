@@ -2,13 +2,15 @@ import re
 
 from sqlalchemy.sql import compiler
 
+ILLEGAL_INITIAL_CHARACTERS = {str(x) for x in range(0, 10)}.union(["$", "_"])
 
 _MAX_BIGINT = 2**63 - 1  # 9223372036854775807
 
 
 class IAccessCompiler(compiler.SQLCompiler):
-    def default_from(self):
-        return " from sysibm.sysdummy1"
+    @staticmethod
+    def default_from():
+        return " FROM SYSIBM.SYSDUMMY1"
 
     def visit_empty_set_expr(self, element_types):
         # noinspection SqlConstantCondition
@@ -86,4 +88,4 @@ class IAccessTypeCompiler(compiler.GenericTypeCompiler):
 
 
 class IAccessIdentifierPreparer(compiler.IdentifierPreparer):
-    pass
+    illegal_initial_characters = ILLEGAL_INITIAL_CHARACTERS

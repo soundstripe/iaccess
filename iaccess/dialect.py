@@ -72,6 +72,15 @@ class IAccessExecutionContext(default.DefaultExecutionContext):
         s = sql.select([sql.literal_column('IDENTITY_VAL_LOCAL()')])
         return self.connection.scalar(s)
 
+    def fire_sequence(self, sequence, type_):
+        d: IAccessDialect = self.dialect
+        return self._execute_scalar(
+            "SELECT NEXT VALUE FOR "
+            + d.identifier_preparer.format_sequence(sequence)
+            + d.statement_compiler.default_from(),
+            type_,
+        )
+
 
 class IAccessDialect(IAccessConnector, default.DefaultDialect):
     name = 'iaccess'
