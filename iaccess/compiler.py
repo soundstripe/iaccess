@@ -81,6 +81,9 @@ class IAccessTypeCompiler(compiler.GenericTypeCompiler):
     def visit_DATETIME(self, type_, **kw):
         return self.visit_TIMESTAMP(type_, **kw)
 
+    def visit_TEXT(self, type_, **kw):
+        return self.visit_CLOB(type_, **kw)
+
 
 class IAccessIdentifierPreparer(compiler.IdentifierPreparer):
     pass
