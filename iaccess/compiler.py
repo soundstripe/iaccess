@@ -3,6 +3,9 @@ import re
 from sqlalchemy.sql import compiler
 
 
+_MAX_BIGINT = 2**63 - 1  # 9223372036854775807
+
+
 class IAccessCompiler(compiler.SQLCompiler):
     def default_from(self):
         return " from sysibm.sysdummy1"
@@ -10,6 +13,16 @@ class IAccessCompiler(compiler.SQLCompiler):
     def visit_empty_set_expr(self, element_types):
         # noinspection SqlConstantCondition
         return ' '.join(['SELECT 1', self.default_from(), 'WHERE 1!=1'])
+
+    def limit_clause(self, select, **kw):
+        text = ""
+        if select._limit_clause is not None:
+            text += "\n LIMIT " + self.process(select._limit_clause, **kw)
+        if select._offset_clause is not None:
+            if select._limit_clause is None:
+                text += "\n LIMIT " + str(_MAX_BIGINT)
+            text += " OFFSET " + self.process(select._offset_clause, **kw)
+        return text
 
 
 class IAccessDDLCompiler(compiler.DDLCompiler):
