@@ -323,5 +323,3 @@ class IAccessDialect(PyODBCConnector, default.DefaultDialect):
             ))
         r = connection.execute(s)
         return r.first() is not None
-
-

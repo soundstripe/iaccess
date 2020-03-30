@@ -24,6 +24,10 @@ class IAccessCompiler(compiler.SQLCompiler):
             text += " OFFSET " + self.process(select._offset_clause, **kw)
         return text
 
+    def visit_sequence(self, sequence, **kw):
+        seq = self.dialect.identifier_preparer.format_sequence(sequence)
+        return f"NEXT VALUE FOR {seq}"
+
 
 class IAccessDDLCompiler(compiler.DDLCompiler):
     def visit_create_table(self, create):
