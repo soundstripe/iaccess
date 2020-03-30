@@ -38,3 +38,7 @@ class Requirements(SuiteRequirements):
     @property
     def implicit_decimal_binds(self):
         return exclusions.closed()
+
+    @property
+    def unbounded_varchar(self):
+        return exclusions.closed()
