@@ -1,6 +1,7 @@
 from itertools import groupby
 
 from iaccess.compiler import IAccessCompiler, IAccessDDLCompiler, IAccessTypeCompiler, IAccessIdentifierPreparer
+from iaccess.connector import IAccessConnector
 from iaccess.information_schema import iseries as ischema
 from sqlalchemy import sql, util, and_
 from sqlalchemy.connectors.pyodbc import PyODBCConnector
@@ -72,7 +73,7 @@ class IAccessExecutionContext(default.DefaultExecutionContext):
         return self.connection.scalar(s)
 
 
-class IAccessDialect(PyODBCConnector, default.DefaultDialect):
+class IAccessDialect(IAccessConnector, default.DefaultDialect):
     name = 'iaccess'
     driver = 'pyodbc'
     encoding = 'utf-8'
