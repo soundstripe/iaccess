@@ -4,6 +4,14 @@ python:
 - 3.7
 - 3.6
 - 3.5
+addons:
+  apt:
+    update: true
+    packages:
+    - unixodbc
+    - odbcinst
+    - unixodbc-dev
+    - libz-dev
 install: pip install -U tox-travis
 script: tox
 deploy:
