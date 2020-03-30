@@ -34,3 +34,7 @@ class Requirements(SuiteRequirements):
     @property
     def empty_inserts(self):
         return exclusions.closed()
+
+    @property
+    def implicit_decimal_binds(self):
+        return exclusions.closed()

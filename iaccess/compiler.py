@@ -71,8 +71,11 @@ class IAccessDDLCompiler(compiler.DDLCompiler):
 
 
 class IAccessTypeCompiler(compiler.GenericTypeCompiler):
-    def visit_boolean(self, type_, **kw):
+    def visit_BOOLEAN(self, type_, **kw):
         return self.visit_SMALLINT(type_, **kw)
+
+    def visit_DATETIME(self, type_, **kw):
+        return self.visit_TIMESTAMP(type_, **kw)
 
 
 class IAccessIdentifierPreparer(compiler.IdentifierPreparer):
