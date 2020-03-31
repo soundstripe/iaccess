@@ -9,8 +9,8 @@ i Access Db2 SQLAlchemy Driver
 .. image:: https://img.shields.io/travis/soundstripe/iaccess.svg
         :target: https://travis-ci.com/soundstripe/iaccess
 
-.. image:: https://readthedocs.org/projects/iaccess/badge/?version=latest
-        :target: https://iaccess.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/python-iaccess/badge/?version=latest
+        :target: https://python-iaccess.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
