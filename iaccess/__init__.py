@@ -1,4 +1,4 @@
-"""Top-level package for SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC."""
+"""Top-level package for i Access Db2 SQLAlchemy Driver."""
 
 __author__ = """Steven Clayton James"""
 __email__ = 'steven@waitforitjames.com'

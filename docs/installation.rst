@@ -8,13 +8,13 @@ Installation
 Stable release
 --------------
 
-To install SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC, run this command in your terminal:
+To install i Access Db2 SQLAlchemy Driver, run this command in your terminal:
 
 .. code-block:: console
 
     $ pip install iaccess
 
-This is the preferred method to install SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC, as it will always install the most recent stable release.
+This is the preferred method to install i Access Db2 SQLAlchemy Driver, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -26,7 +26,7 @@ you through the process.
 From sources
 ------------
 
-The sources for SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC can be downloaded from the `Github repo`_.
+The sources for i Access Db2 SQLAlchemy Driver can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 

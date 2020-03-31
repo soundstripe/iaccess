@@ -1,5 +1,5 @@
 ============================================================
-SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC
+i Access Db2 SQLAlchemy Driver
 ============================================================
 
 

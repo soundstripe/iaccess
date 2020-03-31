@@ -2,7 +2,7 @@
 Usage
 =====
 
-To use SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC in a project::
+To use i Access Db2 SQLAlchemy Driver in a project::
 
     # With a hostname (requires a dummy database name to be in the URL)
     url = 'iaccess+pyodbc://user:password@host/dummy?DBQ=SCHEMA_NAME'
