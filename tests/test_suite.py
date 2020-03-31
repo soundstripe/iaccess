@@ -43,3 +43,15 @@ class TableDDLTest(TableDDLTest):
     @pytest.mark.xfail(reason="need to specify test schema")
     def test_create_table_schema(self):
         return super().test_create_table_schema()
+
+
+class StringTest(StringTest):
+    @requirements.driver_supports_unicode_literals
+    def test_literal_non_ascii(self):
+        super().test_literal_non_ascii()
+
+
+class TextTest(TextTest):
+    @requirements.driver_supports_unicode_literals
+    def test_literal_non_ascii(self):
+        super().test_literal_non_ascii()
