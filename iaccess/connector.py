@@ -4,7 +4,7 @@ from sqlalchemy.connectors.pyodbc import PyODBCConnector
 
 
 class IAccessConnector(PyODBCConnector):
-    pyodbc_driver_name = 'iSeries Access ODBC Driver'
+    pyodbc_driver_name = 'IBM i Access ODBC Driver'
 
     def create_connect_args(self, url):
         connectors, connect_args = super().create_connect_args(url)
