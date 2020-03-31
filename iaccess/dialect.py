@@ -84,7 +84,6 @@ class IAccessExecutionContext(default.DefaultExecutionContext):
 
 class IAccessDialect(IAccessConnector, default.DefaultDialect):
     name = 'iaccess'
-    driver = 'pyodbc'
     encoding = 'utf-8'
     default_param_style = 'qmark'
     schema_name = 'QGPL'
