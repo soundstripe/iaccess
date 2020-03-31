@@ -31,7 +31,8 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Provides support for DB2 for iSeries for remote python clients using IBM i Access Client Solutions ODBC driver",
+    description="Provides support for DB2 for iSeries for remote python clients "
+                "using IBM i Access Client Solutions ODBC driver",
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,

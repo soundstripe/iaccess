@@ -1,4 +1,4 @@
-* SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC version:
+* i Access Db2 SQLAlchemy Driver version:
 * Python version:
 * Operating System:
 

@@ -38,8 +38,8 @@ and "help wanted" is open to whoever wants to implement it.
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC could always use more documentation, whether as part of the
-official SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC docs, in docstrings, or even on the web in blog posts,
+i Access Db2 SQLAlchemy Driver could always use more documentation, whether as part of the
+official i Access Db2 SQLAlchemy Driver docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 Submit Feedback

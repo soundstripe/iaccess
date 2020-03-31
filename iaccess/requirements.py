@@ -1,4 +1,7 @@
-from sqlalchemy.testing import exclusions
+import platform
+
+from sqlalchemy.testing import exclusions, fails_if
+from sqlalchemy.testing.exclusions import LambdaPredicate
 from sqlalchemy.testing.requirements import SuiteRequirements
 
 
@@ -46,3 +49,13 @@ class Requirements(SuiteRequirements):
     @property
     def time_microseconds(self):
         return exclusions.closed()
+
+    @property
+    def driver_supports_unicode_literals(self):
+        return fails_if(LambdaPredicate(lambda: platform.system().lower() != 'windows'),
+                        reason='Linux driver has broken Unicode support')
+
+    @property
+    def unicode_data(self):
+        return fails_if(LambdaPredicate(lambda: platform.system().lower() != 'windows'),
+                        reason='Linux driver has broken Unicode support')

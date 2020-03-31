@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC'
+project = 'i Access Db2 SQLAlchemy Driver'
 copyright = "2020, Steven Clayton James"
 author = "Steven Clayton James"
 
@@ -128,7 +128,7 @@ latex_elements = {
 # [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'iaccess.tex',
-     'SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC Documentation',
+     'i Access Db2 SQLAlchemy Driver Documentation',
      'Steven Clayton James', 'manual'),
 ]
 
@@ -139,7 +139,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     (master_doc, 'iaccess',
-     'SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC Documentation',
+     'i Access Db2 SQLAlchemy Driver Documentation',
      [author], 1)
 ]
 
@@ -151,7 +151,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'iaccess',
-     'SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC Documentation',
+     'i Access Db2 SQLAlchemy Driver Documentation',
      author,
      'iaccess',
      'One line description of project.',

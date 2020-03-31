@@ -1,5 +1,5 @@
-Welcome to SQLAlchemy Driver for DB2 via i Access Client Solutions ODBC's documentation!
-======================================
+Welcome to i Access Db2 SQLAlchemy Driver's documentation!
+==========================================================
 
 .. toctree::
    :maxdepth: 2
