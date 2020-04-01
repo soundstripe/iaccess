@@ -43,7 +43,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/soundstripe/iaccess',
-    version='0.1.2',
+    version='0.1.3',
     zip_safe=False,
     entry_points={
      'sqlalchemy.dialects': [
