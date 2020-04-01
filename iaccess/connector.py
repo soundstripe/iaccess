@@ -12,6 +12,9 @@ class IAccessConnector(PyODBCConnector):
         # force unicode mode (utf-16 instead of ebdic default)
         connect_args.update(unicodesql=1)
 
+        # set true autocommit on (without this, autocommit forces isolation mode *NONE
+        connect_args.update(trueautocommit=1)
+
         # non-standard "system" keyword required instead of "server"
         server = re.search('server=([^;]+)', connectors[0], re.IGNORECASE)
         if server:
