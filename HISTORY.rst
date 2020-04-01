@@ -6,6 +6,7 @@ History
 ------------------
 
 * Remove Python 3.5 from list of supported versions
+* Fix deployment issue: correct PYPI key encryption
 
 
 0.1.0 (2020-04-01)
