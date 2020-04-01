@@ -47,7 +47,7 @@ setup(
     zip_safe=False,
     entry_points={
      'sqlalchemy.dialects': [
-          'iaccess.pyodbc = iaccess.pyodbc:IAccessDialect',
+          'iaccess.pyodbc = iaccess.dialect:IAccessDialect',
           ]
     }
 )
