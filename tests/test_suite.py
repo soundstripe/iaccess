@@ -62,8 +62,16 @@ class UnicodeVarcharTest(UnicodeVarcharTest):
     def test_literal_non_ascii(self):
         super().test_literal_non_ascii()
 
+    @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
+    def test_literal(self):
+        super().test_literal()
+
 
 class UnicodeTextTest(UnicodeTextTest):
     @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
     def test_literal_non_ascii(self):
         super().test_literal_non_ascii()
+        
+    @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
+    def test_literal(self):
+        super().test_literal()
