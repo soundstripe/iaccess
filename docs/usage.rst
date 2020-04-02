@@ -2,20 +2,56 @@
 Usage
 =====
 
-To use i Access Db2 SQLAlchemy Driver in a project::
 
-    # With a hostname (requires a dummy database name to be in the URL)
-    url = 'iaccess+pyodbc://user:password@host/dummy?DBQ=SCHEMA_NAME'
+With a hostname
+---------------
+(requires a dummy database name to be in the URL):python:
 
-    # or with a named DSN
-    url = 'iaccess+pyodbc://dsn_name/?DBQ=SCHEMA_NAME'
+    >>> url = 'iaccess+pyodbc://user:password@host/dummy?DBQ=SCHEMA_NAME'
+    >>> engine = create_engine(url, echo=True)  # echo to log all generated SQL
 
-    # now use as normal for sqlalchemy
-    from sqlalchemy import create_engine
+With a named DSN
+----------------
+Must define DSN in ODBC Sources (Windows) or in :code:/etc/odbcinst.ini (UnixODBC).:python:
 
-    e = create_engine(url)
-    conn = e.connect()
-    results = conn.execute("SELECT 'hello world' FROM SYSIBM.SYSDUMMY1")
-    print(list(results))
+    >>> url = 'iaccess+pyodbc://dsn_name/?DBQ=SCHEMA_NAME'
+    >>> engine = create_engine(url, echo=True)  # echo to log all generated SQL
 
 
+Using your connection string
+----------------------------
+For more details, consult `sqlalchemy documention`_. This example is taken from the SQLAlchemy Core tutorial, modified to specify a length on the String columns since Db2 for i does not allow VARCHAR columns without a length specified.
+
+:python:
+
+    >>> from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+    >>> metadata = MetaData()
+    >>> users = Table('users', metadata,
+    ...     Column('id', Integer, primary_key=True),
+    ...     Column('name', String(50)),
+    ...     Column('fullname', String(50)),
+    ... )
+
+    >>> addresses = Table('addresses', metadata,
+    ...   Column('id', Integer, primary_key=True),
+    ...   Column('user_id', None, ForeignKey('users.id')),
+    ...   Column('email_address', String(50), nullable=False)
+    ...  )
+
+    >>> metadata.create_all(engine)
+
+    >>> conn = engine.connect()
+
+    >>> ins = users.insert().values(name='jack', fullname='Jack Jones')
+    >>> result = conn.execute(ins)
+
+    >>> result.inserted_primary_key
+    [1]
+
+    >>> s = select([users])
+    >>> result = conn.execute(s)
+    >>> list(result)
+    [(1, 'jack', 'Jack Jones')]
+
+
+.. _sqlalchemy documention: https://docs.sqlalchemy.org/en/13/core/tutorial.html

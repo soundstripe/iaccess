@@ -25,10 +25,40 @@ Other work in this area includes the ibm_db_ and ibm_db_sa_ projects, which also
 * Free software: MIT license
 
 
-Features
---------
+Installation
+------------
+Pre-requisites
+==============
+* UnixODBC (if on Linux or in PASE for i): Windows ships with ODBC installed, but on Linux you'll need unixodbc. On Ubuntu you can install this with :code:`apt-get install unixodbc`. You may also need to :code:`apt-get install unixodbc-dev` if you get errors about a missing `sql.h` file.
+* `i Access Client Solutions ODBC`_ driver: You'll need this driver available only from IBM.
+* IBM i 7.2+ on your target system: Older versions of the OS may work but I have not tested against them. If you do not happen to have an IBM Power system sitting around your house (although who doesn't?!) you may be able to get an account to play with at Pub400.com_.
 
-* TODO
+
+Install via pip
+===============
+
+Use pip to download and install the latest released version of this tool.::
+
+    pip install iaccess
+
+Install via setup.py
+====================
+Download or clone this repo and install via setup.py::
+
+    python setup.py install
+
+
+Quickstart
+----------
+If you know what you're doing with SQLAlchemy this package should be nearly invisible to you with the exception of the URI used to connect to the database.::
+
+    # connect via hostname / ip address
+    >>> from sqlalchemy import create_engine
+    >>> engine = create_engine('iaccess+pyodbc://user:password@hostname/dummy?DBQ=DEFAULT_SCHEMA')  # `dummy` can be any string
+
+    # connect via named ODBC DSN
+    >>> from sqlalchemy import create_engine
+    >>> engine = create_engine('iaccess+pyodbc://user:password@dsn_name')
 
 Credits
 -------
@@ -37,9 +67,12 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 
 The IBM i Access ODBC Driver is developed and licensed separately by IBM.
 
+Continuous integration testing is performed against the system available from the great guys at Pub400.com_.
+
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
 .. _`i Access Client Solutions ODBC`: https://www.ibm.com/support/pages/ibm-i-access-client-solutions
 .. _ibm_db: https://github.com/ibmdb/python-ibmdb
 .. _ibm_db_sa: https://github.com/ibmdb/python-ibmdb
 .. _`use this driver locally`: https://www.ibmsystemsmag.com/Power-Systems/08/2019/ODBC-Driver-for-IBM-i
+.. _Pub400.com: https://pub400.com
