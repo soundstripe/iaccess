@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 """The setup script."""
+import re
+from pathlib import Path
 
 from setuptools import setup, find_packages
 
@@ -9,6 +11,11 @@ with open('README.rst') as readme_file:
 
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
+
+version_file = Path('iaccess/__init__.py')
+version = re.match(
+    r""".*__version__ = '(.*?)'""", version_file.read_text(), re.S
+).group(1)
 
 requirements = ['sqlalchemy', 'pyodbc<4.0.30']
 
@@ -43,7 +50,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/soundstripe/iaccess',
-    version='0.1.3',
+    version=version,
     zip_safe=False,
     entry_points={
      'sqlalchemy.dialects': [
