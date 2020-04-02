@@ -36,6 +36,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Topic :: Database',
     ],
     description="Provides support for DB2 for iSeries for remote python clients "
                 "using IBM i Access Client Solutions ODBC driver",
