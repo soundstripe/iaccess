@@ -2,6 +2,13 @@
 History
 =======
 
+
+0.2.1 (2020-10-20)
+------------------
+
+* Add compilation of mod (%) operator to MOD() function, casting as bigint
+
+
 0.2.0 (2020-04-02)
 ------------------
 
