@@ -30,6 +30,12 @@ class IAccessCompiler(compiler.SQLCompiler):
         seq = self.dialect.identifier_preparer.format_sequence(sequence)
         return f"NEXT VALUE FOR {seq}"
 
+    def visit_mod_binary(self, binary, operator, **kw):
+        return "mod(cast(%s as bigint), cast(%s as bigint))" % (
+            self.process(binary.left, **kw),
+            self.process(binary.right, **kw),
+        )
+
 
 class IAccessDDLCompiler(compiler.DDLCompiler):
     def visit_create_table(self, create):
