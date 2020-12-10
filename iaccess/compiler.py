@@ -36,6 +36,9 @@ class IAccessCompiler(compiler.SQLCompiler):
             self.process(binary.right, **kw),
         )
 
+    def visit_savepoint(self, savepoint_stmt):
+        return "SAVEPOINT %s ON ROLLBACK RETAIN CURSORS" % self.preparer.format_savepoint(savepoint_stmt)
+
 
 class IAccessDDLCompiler(compiler.DDLCompiler):
     def visit_create_table(self, create):
