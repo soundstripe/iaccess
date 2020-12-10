@@ -15,6 +15,7 @@ class IAccessCompiler(compiler.SQLCompiler):
         # noinspection SqlConstantCondition
         return ' '.join(['SELECT 1', self.default_from(), 'WHERE 1!=1'])
 
+    # noinspection PyProtectedMember
     def limit_clause(self, select, **kw):
         text = ""
         if select._limit_clause is not None:
@@ -44,7 +45,7 @@ class IAccessDDLCompiler(compiler.DDLCompiler):
         ddl = super().visit_create_table(create)
 
         # IBM supports `DECLARE GLOBAL TEMPORARY TABLE` instead of `CREATE GLOBAL TEMPORARY TABLE`
-        if re.match('\W*CREATE GLOBAL TEMPORARY', ddl):
+        if re.match(r'\W*CREATE GLOBAL TEMPORARY', ddl):
             ddl = ddl.replace('CREATE GLOBAL', 'DECLARE GLOBAL', 1)
         return ddl
 
