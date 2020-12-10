@@ -8,8 +8,7 @@ _MAX_BIGINT = 2**63 - 1  # 9223372036854775807
 
 
 class IAccessCompiler(compiler.SQLCompiler):
-    @staticmethod
-    def default_from():
+    def default_from(self):
         return " FROM SYSIBM.SYSDUMMY1"
 
     def visit_empty_set_expr(self, element_types):
