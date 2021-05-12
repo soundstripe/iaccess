@@ -49,3 +49,13 @@ class Requirements(SuiteRequirements):
     @property
     def time_microseconds(self):
         return exclusions.closed()
+
+    def get_isolation_levels(self, config):
+        return {
+            "default": "READ COMMITTED",
+            "supported": [
+                "SERIALIZABLE", "READ UNCOMMITTED",
+                "READ COMMITTED", "REPEATABLE READ",
+                "NO COMMIT", "AUTOCOMMIT"
+            ]
+        }
