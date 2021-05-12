@@ -322,6 +322,34 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
         result = results[0] if results else None
         return result
 
+    def get_unique_constraints(
+        self, connection, table_name, schema=None, **kw
+    ):
+        table_name = self.denormalize_name(table_name)
+        schema = self.denormalize_name(schema or self.default_schema_name)
+        constraints = ischema.constraints
+        constraint_columns = ischema.constraint_columns
+        j = constraints.join(constraint_columns, and_(
+            constraints.c.table_schema == constraint_columns.c.table_schema,
+            constraints.c.table_name == constraint_columns.c.table_name,
+            constraints.c.constraint_name == constraint_columns.c.constraint_name,
+        ))
+        s = sql.select([
+            constraint_columns.c.constraint_name,
+            constraint_columns.c.column_name,
+        ], and_(
+            constraints.c.constraint_type == 'UNIQUE',
+            constraints.c.table_name == table_name,
+            constraints.c.table_schema == schema,
+        )).select_from(j)
+        r = connection.execute(s)
+        grouped = groupby(r, lambda x: self.normalize_name(x.constraint_name))
+        results = [{
+            'column_names': [self.normalize_name(col.column_name) for col in columns],
+            'name': cst_name,
+        } for (cst_name, columns) in grouped]
+        return results
+
     def has_sequence(self, connection, sequence_name, schema=None):
         schema = self.denormalize_name(schema or self.default_schema_name)
         sequence_name = self.denormalize_name(sequence_name)
