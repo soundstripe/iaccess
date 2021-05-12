@@ -109,6 +109,8 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
     preparer = IAccessIdentifierPreparer
     execution_ctx_cls = IAccessExecutionContext
 
+    supports_statement_cache = True
+
     @classmethod
     def dbapi(cls):
         import pyodbc
@@ -332,3 +334,19 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
             ))
         r = connection.execute(s)
         return r.first() is not None
+
+    def get_default_isolation_level(self, dbapi_conn):
+        return "READ COMMITTED"
+
+    def set_isolation_level(self, connection, level):
+        if hasattr(connection, "connection"):
+            dbapi_connection = connection.connection
+        else:
+            dbapi_connection = connection
+        if level == "AUTOCOMMIT":
+            dbapi_connection.autocommit = True
+        else:
+            dbapi_connection.autocommit = False
+            connection.rollback()
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION ISOLATION LEVEL %s" % level)
