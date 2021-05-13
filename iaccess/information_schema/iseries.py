@@ -51,7 +51,6 @@ indexes = Table(
     Column('COLUMN_COUNT', String, key='column_count'),
     Column('IS_UNIQUE', String, key='is_unique'),
     Column('INDEX_SCHEMA', String, key='index_schema'),
-    Column('INDEX_SCHEMA', String, key='index_schema'),
     schema='QSYS2',
 )
 
@@ -61,7 +60,6 @@ keys = Table(
     Column('INDEX_NAME', String, key='index_name'),
     Column('COLUMN_NAME', String, key='column_name'),
     Column('ORDINAL_POSITION', Integer, key='ordinal_position'),
-    Column('COLUMN_NAME', String, key='column_name'),
     schema='QSYS2',
 )
 
