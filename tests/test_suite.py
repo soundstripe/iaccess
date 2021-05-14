@@ -71,7 +71,42 @@ class UnicodeTextTest(UnicodeTextTest):
     @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
     def test_literal_non_ascii(self):
         super().test_literal_non_ascii()
-        
+
     @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
     def test_literal(self):
         super().test_literal()
+
+
+class ExistsTest(ExistsTest):
+    def test_select_exists(self, connection):
+        """overridden because iseries does not support naked literal bound parameters in select clauses"""
+        stuff = self.tables.stuff
+        eq_(
+            connection.execute(
+                select([text('1')]).where(
+                    exists().where(stuff.c.data == "some data")
+                )
+            ).fetchall(),
+            [(1,)],
+        )
+
+    def test_select_exists_false(self, connection):
+        stuff = self.tables.stuff
+        eq_(
+            connection.execute(
+                select([text('1')]).where(
+                    exists().where(stuff.c.data == "no data")
+                )
+            ).fetchall(),
+            [],
+        )
+
+
+class CompositeKeyReflectionTest(CompositeKeyReflectionTest):
+    @pytest.mark.skip(reason="composite keys unsupported by db2 for i ")
+    def test_fk_column_order(self):
+        super().test_fk_column_order()
+
+    @pytest.mark.skip(reason="composite keys unsupported by db2 for i ")
+    def test_pk_column_order(self):
+        super().test_pk_column_order()
