@@ -1,5 +1,6 @@
 import re
 
+from sqlalchemy import Constraint
 from sqlalchemy.sql import compiler
 
 ILLEGAL_INITIAL_CHARACTERS = {str(x) for x in range(0, 10)}.union(["$", "_"])
@@ -109,3 +110,9 @@ class IAccessTypeCompiler(compiler.GenericTypeCompiler):
 
 class IAccessIdentifierPreparer(compiler.IdentifierPreparer):
     illegal_initial_characters = ILLEGAL_INITIAL_CHARACTERS
+
+    def format_constraint(self, constraint: Constraint, **kwargs):
+        formatted_name = super().format_constraint(constraint, **kwargs)
+        if constraint.table.schema:
+            formatted_name = self.format_schema(constraint.table.schema) + '.' + formatted_name
+        return formatted_name
