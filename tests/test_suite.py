@@ -7,8 +7,8 @@ from sqlalchemy.testing.suite import *
 
 class CTETest(CTETest):
     @pytest.mark.xfail(reason="ctes not allowed in insert statements on db2 for iseries")
-    def test_insert_from_select_round_trip(self):
-        super().test_insert_from_select_round_trip()
+    def test_insert_from_select_round_trip(self, connection):
+        super().test_insert_from_select_round_trip(connection)
 
 
 class ComponentReflectionTest(ComponentReflectionTest):
@@ -23,8 +23,12 @@ class ComponentReflectionTest(ComponentReflectionTest):
 
 class ExpandingBoundInTest(ExpandingBoundInTest):
     @pytest.mark.xfail(reason="search condition where null in set not unsupported on db2 for iseries")
-    def test_null_in_empty_set_is_false(self):
-        return super().test_null_in_empty_set_is_false()
+    def test_null_in_empty_set_is_false_bindparam(self, connection):
+        return super().test_null_in_empty_set_is_false_bindparam(connection)
+
+    @pytest.mark.xfail(reason="search condition where null in set not unsupported on db2 for iseries")
+    def test_null_in_empty_set_is_false_direct(self, connection):
+        return super().test_null_in_empty_set_is_false_direct(connection)
 
 
 class InsertBehaviorTest(InsertBehaviorTest):
@@ -35,8 +39,8 @@ class InsertBehaviorTest(InsertBehaviorTest):
 
 class NumericTest(NumericTest):
     @pytest.mark.xfail(reason="iaccess odbc driver is not able to infer some data types")
-    def test_float_coerce_round_trip(self):
-        return super().test_float_coerce_round_trip()
+    def test_float_coerce_round_trip(self, connection):
+        return super().test_float_coerce_round_trip(connection)
 
 
 class TableDDLTest(TableDDLTest):
@@ -47,34 +51,34 @@ class TableDDLTest(TableDDLTest):
 
 class StringTest(StringTest):
     @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
-    def test_literal_non_ascii(self):
-        super().test_literal_non_ascii()
+    def test_literal_non_ascii(self, connection):
+        super().test_literal_non_ascii(connection)
 
 
 class TextTest(TextTest):
     @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
-    def test_literal_non_ascii(self):
-        super().test_literal_non_ascii()
+    def test_literal_non_ascii(self, literal_round_trip):
+        super().test_literal_non_ascii(literal_round_trip)
 
 
 class UnicodeVarcharTest(UnicodeVarcharTest):
     @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
-    def test_literal_non_ascii(self):
-        super().test_literal_non_ascii()
+    def test_literal_non_ascii(self, literal_round_trip):
+        super().test_literal_non_ascii(literal_round_trip)
 
     @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
-    def test_literal(self):
-        super().test_literal()
+    def test_literal(self, literal_round_trip):
+        super().test_literal(literal_round_trip)
 
 
 class UnicodeTextTest(UnicodeTextTest):
     @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
-    def test_literal_non_ascii(self):
-        super().test_literal_non_ascii()
+    def test_literal_non_ascii(self, literal_round_trip):
+        super().test_literal_non_ascii(literal_round_trip)
 
     @pytest.mark.skip(reason="high unicode literals cannot fit in UCS-2 encoding used by iaccess driver")
-    def test_literal(self):
-        super().test_literal()
+    def test_literal(self, literal_round_trip):
+        super().test_literal(literal_round_trip)
 
 
 class ExistsTest(ExistsTest):
