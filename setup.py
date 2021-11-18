@@ -17,7 +17,7 @@ version = re.match(
     r""".*__version__ = '(.*?)'""", version_file.read_text(), re.S
 ).group(1)
 
-requirements = ['sqlalchemy', 'pyodbc<4.0.30']
+requirements = ['sqlalchemy', 'pyodbc!=4.0.30']
 
 setup_requirements = ['pytest-runner', ]
 
