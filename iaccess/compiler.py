@@ -11,6 +11,11 @@ class IAccessCompiler(compiler.SQLCompiler):
     def default_from(self):
         return " FROM SYSIBM.SYSDUMMY1"
 
+    def visit_empty_set_op_expr(self, type_, expand_op):
+        # Db2 for i don't seem to be able to handle
+        # the empty set impl
+        return self.visit_empty_set_expr(type_)
+
     def visit_empty_set_expr(self, element_types):
         # noinspection SqlConstantCondition
         return ' '.join(['SELECT 1', self.default_from(), 'WHERE 1!=1'])
