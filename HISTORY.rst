@@ -2,10 +2,10 @@
 History
 =======
 
-0.4.1 (2022-04-22)
+0.4.2 (2022-04-22)
 ------------------
 
-* Fixed problem with server= vs system= in DSN connection strings
+* SERVER= is case-sensitive some versions of iaccess driver
 
 
 0.2.1 (2020-10-20)
