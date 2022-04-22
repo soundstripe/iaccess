@@ -34,6 +34,7 @@ class IAccessConnector(PyODBCConnector):
         # non-standard "system" keyword required instead of "server"
         server = re.search('server=([^;]+)', connectors[0], re.IGNORECASE)
         if server:
+            connectors[0] = connectors[0].rstrip(';') + ';system=' + server.group(1)
             connect_args.update(system=server.group(1))
 
         return [connectors, connect_args]
