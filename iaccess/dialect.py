@@ -69,7 +69,7 @@ ischema_names = {
 
 class IAccessExecutionContext(default.DefaultExecutionContext):
     def get_lastrowid(self):
-        s = sql.select([sql.literal_column('IDENTITY_VAL_LOCAL()')])
+        s = sql.select(sql.literal_column('IDENTITY_VAL_LOCAL()'))
         return self.connection.scalar(s)
 
     def fire_sequence(self, sequence, type_):
