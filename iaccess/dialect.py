@@ -4,7 +4,6 @@ from iaccess.compiler import IAccessCompiler, IAccessDDLCompiler, IAccessTypeCom
 from iaccess.connector import IAccessConnector
 from iaccess.information_schema import iseries as ischema
 from sqlalchemy import sql, util, and_
-from sqlalchemy.connectors.pyodbc import PyODBCConnector
 from sqlalchemy.engine import default, reflection
 from sqlalchemy.sql import sqltypes
 from sqlalchemy.types import BLOB, DATE, DATETIME, SMALLINT, BIGINT, INTEGER, CHAR, VARCHAR, CLOB, DECIMAL, NUMERIC, \
@@ -112,7 +111,7 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
     supports_statement_cache = True
 
     @classmethod
-    def dbapi(cls):
+    def import_dbapi(cls):
         import pyodbc
         return pyodbc
 
