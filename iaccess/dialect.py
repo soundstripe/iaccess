@@ -126,7 +126,7 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
             tables.c.table_schema == sql.func.coalesce(schema, sql.literal_column('CURRENT_SCHEMA'))
         )
 
-        s = sql.select([tables], whereclause)
+        s = sql.select(tables).where(whereclause)
         c = connection.execute(s)
         return c.first() is not None
 
@@ -145,7 +145,8 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
         tables = ischema.tables
         schema = self.denormalize_name(schema or self.default_schema_name)
         s = sql.select(
-            [tables.c.table_name],
+            tables.c.table_name
+        ).where(
             sql.and_(
                 tables.c.table_schema == schema,
                 tables.c.table_type == 'T',
@@ -203,7 +204,7 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
         current_schema = self.denormalize_name(schema or self.default_schema_name)
         table_name = self.denormalize_name(table_name)
         columns = ischema.columns
-        s = sql.select([
+        s = sql.select(
             columns.c.column_name,
             columns.c.data_type,
             columns.c.length,
@@ -220,7 +221,7 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
             columns.c.identity_cycle,
             columns.c.identity_cache,
             columns.c.identity_order,
-        ], sql.and_(
+        ).where(sql.and_(
             columns.c.table_name == table_name,
             columns.c.table_schema == current_schema,
         ))
@@ -277,11 +278,11 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
         indexes = ischema.indexes
         keys = ischema.keys
         j = indexes.join(keys, indexes.c.index_name == keys.c.index_name)
-        s = sql.select([
+        s = sql.select(
             indexes.c.index_name,
             indexes.c.is_unique,
             keys.c.column_name,
-        ], and_(
+        ).where(and_(
             indexes.c.table_schema == schema,
             indexes.c.table_name == table_name,
         )).select_from(j).order_by(indexes.c.index_name, keys.c.ordinal_position)
@@ -304,10 +305,10 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
             constraints.c.table_name == constraint_columns.c.table_name,
             constraints.c.constraint_name == constraint_columns.c.constraint_name,
         ))
-        s = sql.select([
+        s = sql.select(
             constraint_columns.c.constraint_name,
             constraint_columns.c.column_name,
-        ], and_(
+        ).where(and_(
             constraints.c.constraint_type == 'PRIMARY KEY',
             constraints.c.table_name == table_name,
             constraints.c.table_schema == schema,
@@ -333,10 +334,10 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
             constraints.c.table_name == constraint_columns.c.table_name,
             constraints.c.constraint_name == constraint_columns.c.constraint_name,
         ))
-        s = sql.select([
+        s = sql.select(
             constraint_columns.c.constraint_name,
             constraint_columns.c.column_name,
-        ], and_(
+        ).where(and_(
             constraints.c.constraint_type == 'UNIQUE',
             constraints.c.table_name == table_name,
             constraints.c.table_schema == schema,
@@ -353,8 +354,7 @@ class IAccessDialect(IAccessConnector, default.DefaultDialect):
         schema = self.denormalize_name(schema or self.default_schema_name)
         sequence_name = self.denormalize_name(sequence_name)
         sequences = ischema.sequences
-        s = sql.select(
-            [sequences.c.sequence_name],
+        s = sql.select(sequences.c.sequence_name).where(
             and_(
                 sequences.c.sequence_name == sequence_name,
                 sequences.c.sequence_schema == schema,
