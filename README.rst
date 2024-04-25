@@ -30,7 +30,7 @@ Installation
 Pre-requisites
 ==============
 * UnixODBC (if on Linux or in PASE for i): Windows ships with ODBC installed, but on Linux you'll need unixodbc. On Ubuntu you can install this with :code:`apt-get install unixodbc`. You may also need to :code:`apt-get install unixodbc-dev` if you get errors about a missing `sql.h` file.
-* `i Access Client Solutions ODBC`_ driver: You'll need this driver available only from IBM.
+* `i Access Client Solutions ODBC`_ driver: You'll need this driver available. There are `repos available for major Linux distributions`_.
 * IBM i 7.2+ on your target system: Older versions of the OS may work but I have not tested against them. If you do not happen to have an IBM Power system sitting around your house (although who doesn't?!) you may be able to get an account to play with at Pub400.com_.
 
 
@@ -76,3 +76,4 @@ Continuous integration testing is performed against the system available from th
 .. _ibm_db_sa: https://github.com/ibmdb/python-ibmdb
 .. _`use this driver locally`: https://www.ibmsystemsmag.com/Power-Systems/08/2019/ODBC-Driver-for-IBM-i
 .. _Pub400.com: https://pub400.com
+.. _repos available for major Linux distributions: https://kadler.io/blog/2022-05-20-odbc-repos/
